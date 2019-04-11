@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "298375652839",
+    "firebase_url": "https://sfootprint-88ac8.firebaseio.com",
+    "project_id": "sfootprint-88ac8",
+    "storage_bucket": "sfootprint-88ac8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:298375652839:android:5ac42d034b03ef78",
+        "android_client_info": {
+          "package_name": "com.example.sfootprint"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCj33MU2lXeocsRIc1TxNE55ZYVK6GuUTA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "298375652839-1158l7ncobgvj83lkk35jmtk47n1u5ku.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "298375652839-o9nia1bqunu1gvahbnq9jmapd3ufuscv.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.sfootprint"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
