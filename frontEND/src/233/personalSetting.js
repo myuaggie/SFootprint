@@ -35,6 +35,7 @@ const styles = theme => ({
     textField: {
         marginLeft: theme.spacing.unit,
         marginRight: theme.spacing.unit,
+        width: 220,
     },
     dense: {
         marginTop: 16,
@@ -52,21 +53,25 @@ const styles = theme => ({
         paddingTop: '56.25%', // 16:9
     },
 });
-
-const ranges = [
+const currencies = [
     {
-        value: '0-20',
-        label: '0 to 20',
+        value: 'IT',
+        label: 'IT',
     },
     {
-        value: '21-50',
-        label: '21 to 50',
+        value: 'Financial',
+        label: 'Financial',
     },
     {
-        value: '51-100',
-        label: '51 to 100',
+        value: 'Math',
+        label: 'Math',
+    },
+    {
+        value: 'Music',
+        label: 'Music',
     },
 ];
+
 
 class personalSetting extends React.Component {
     state = {
@@ -99,6 +104,8 @@ class personalSetting extends React.Component {
             <div align ="center">
 
                 <Avatar src={this.state.avatarUrl}className={classes.bigAvatar}/>
+                <br/>
+                <InputLabel htmlFor="input-with-icon-adornment">{this.state.type}</InputLabel>
                 <br/>
                 <FormControl className={classes.margin}>
                     <InputLabel htmlFor="input-with-icon-adornment">Username</InputLabel>
@@ -190,12 +197,29 @@ class personalSetting extends React.Component {
                         }
                     />
                 </FormControl>
+
                 <br/>
                 <FormControl className={classes.margin}>
-                    <InputLabel htmlFor="input-with-icon-adornment">CareerGoal</InputLabel>
-                    <Input
-                        id="input-with-icon-adornment"
+                    <TextField
+                        select
+                        label="CareerGoal"
+                        className={classNames(classes.margin, classes.textField)}
                         value={this.state.careerGoal}
+                        onChange={this.handleChange('careerGoal')}
+                        InputProps={{
+                            startAdornment:
+                                <InputAdornment position="start">
+                                    <i className="material-icons">
+                                    sentiment_satisfied_alt
+                                    </i>
+                                </InputAdornment>,
+                        }}
+                        SelectProps={{
+                            native: true,
+                            MenuProps: {
+                                className: classes.menu,
+                            },
+                        }}
                         startAdornment={
                             <InputAdornment position="start">
                                 <i className="material-icons">
@@ -203,8 +227,15 @@ class personalSetting extends React.Component {
                                 </i>
                             </InputAdornment>
                         }
-                    />
+                    >
+                        {currencies.map(option => (
+                            <option key={option.value} value={option.value}>
+                                {option.label}
+                            </option>
+                        ))}
+                    </TextField>
                 </FormControl>
+
                 <br/>
                 <FormControl className={classes.margin}>
                     <InputLabel htmlFor="input-with-icon-adornment">Phone</InputLabel>
