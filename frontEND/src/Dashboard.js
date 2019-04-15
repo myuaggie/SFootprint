@@ -14,12 +14,18 @@ import Badge from '@material-ui/core/Badge';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import { mainListItems, secondaryListItems } from './ListItems';
+import {secondaryListItems } from './ListItems';
 import { createMuiTheme} from '@material-ui/core/styles';
-import purple from '@material-ui/core/colors/purple';
 import {MuiThemeProvider} from "@material-ui/core/es/styles/index";
 import blueGrey from '@material-ui/core/colors/blueGrey';
-
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import PublicIcon from '@material-ui/icons/Public';
+import AssignmentIcon from '@material-ui/icons/Assignment';
+import PetsIcon from '@material-ui/icons/Pets';
+import {Link} from "react-router-dom";
+import Footer from "./Footer";
 const theme = createMuiTheme({
     palette: {
         primary: blueGrey,
@@ -116,9 +122,13 @@ const styles = theme => ({
 });
 
 class Dashboard extends React.Component {
-    state = {
-        open: true,
-    };
+    constructor(props)
+    {
+        super(props);
+        this.state = {
+            open:true
+        };
+    }
 
     handleDrawerOpen = () => {
         this.setState({ open: true });
@@ -180,12 +190,37 @@ class Dashboard extends React.Component {
                         </IconButton>
                     </div>
                     <Divider />
-                    <List>{mainListItems}</List>
+                    <List>
+                    <ListItem button>
+                        <ListItemIcon>
+                            <PetsIcon/>
+                        </ListItemIcon>
+                        <ListItemText primary="我的足迹" />
+                    </ListItem>
+
+                    <Link to="/news">
+                        <ListItem button>
+                            <ListItemIcon>
+                                <PublicIcon/>
+                            </ListItemIcon>
+                            <ListItemText primary="校园新闻" />
+                        </ListItem>
+                    </Link>
+
+                    <ListItem button>
+                        <ListItemIcon>
+                            <AssignmentIcon/>
+                        </ListItemIcon>
+                        <ListItemText primary="申请" />
+                    </ListItem>
+                    </List>
                     <Divider />
                     <List>{secondaryListItems}</List>
                 </Drawer>
                 <main className={classes.content}>
-                    好
+                    <div className={classes.appBarSpacer} />
+                    {this.props.children}
+                    <Footer/>
                 </main>
                 </MuiThemeProvider>
             </div>

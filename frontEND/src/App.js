@@ -1,18 +1,23 @@
 import React, { Component } from 'react';
 import './App.css';
 import News from "./News";
-import {Route} from "react-router-dom";
-import HashRouter from "react-router-dom/es/HashRouter";
+import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import Dashboard from "./Dashboard";
+import FirstPage from "./FirstPage";
 
 class App extends Component {
     render() {
         return (
-            <HashRouter>
+            <div>
+            <BrowserRouter>
                 <Dashboard>
-                    <Route path='/news' component={News}/>
+                    <Switch>
+                        <Route exact path='/' component={FirstPage}/>
+                        <Route path='/news' component={News}/>
+                    </Switch>
                 </Dashboard>
-            </HashRouter>
+            </BrowserRouter>
+            </div>
         );
     }
 }
