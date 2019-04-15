@@ -11,12 +11,12 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
 
   LoginModel loginModel = LoginModel();
-  PeerModel peerModel = PeerModel();
+  //PeerModel peerModel = PeerModel();
   @override
   Widget build(BuildContext context) {
     return ScopedModel(
         model:loginModel,
-        child:ScopedModel(model: peerModel, child:MaterialApp(
+        child:MaterialApp(
           title: 'SFootprint',
           theme: ThemeData(
             // This is the theme of your application.
@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
             '/home' : (BuildContext context) => new SFootprintHome(),
             '/login': (BuildContext context) => new LoginScreen(),
           },
-        ))
+        )
     );
   }
 }
