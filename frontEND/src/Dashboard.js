@@ -191,28 +191,49 @@ class Dashboard extends React.Component {
                     </div>
                     <Divider />
                     <List>
-                    <ListItem button>
-                        <ListItemIcon>
-                            <PetsIcon/>
-                        </ListItemIcon>
-                        <ListItemText primary="我的足迹" />
-                    </ListItem>
-
-                    <Link to="/news">
+                        <Link to="/personalSetting">
+                            <ListItem button>
+                                <ListItemIcon>
+                                    <i className="material-icons">
+                                        account_box
+                                    </i>
+                                </ListItemIcon>
+                                <ListItemText primary="个人信息" />
+                            </ListItem>
+                        </Link>
                         <ListItem button>
                             <ListItemIcon>
-                                <PublicIcon/>
+                                <PetsIcon/>
                             </ListItemIcon>
-                            <ListItemText primary="校园新闻" />
+                            <ListItemText primary="我的足迹" />
                         </ListItem>
-                    </Link>
 
-                    <ListItem button>
-                        <ListItemIcon>
-                            <AssignmentIcon/>
-                        </ListItemIcon>
-                        <ListItemText primary="申请" />
-                    </ListItem>
+                        <Link to="/news">
+                            <ListItem button>
+                                <ListItemIcon>
+                                    <PublicIcon/>
+                                </ListItemIcon>
+                                <ListItemText primary="校园新闻" />
+                            </ListItem>
+                        </Link>
+
+                        <ListItem button>
+                            <ListItemIcon>
+                                <AssignmentIcon/>
+                            </ListItemIcon>
+                            <ListItemText primary="申请" />
+                        </ListItem>
+
+                        <Link to="/broadcast">
+                            <ListItem button>
+                                <ListItemIcon>
+                                    <PublicIcon/>
+                                </ListItemIcon>
+                                <ListItemText primary="发布通知" />
+                            </ListItem>
+                        </Link>
+
+
                     </List>
                     <Divider />
                     <List>{secondaryListItems}</List>
