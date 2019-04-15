@@ -56,13 +56,18 @@ class SettingsScreenState extends State<SettingsScreen>{
       );
     }
     else {
-      return new Container(
+      return ListView(
+    shrinkWrap: true,
+    padding: EdgeInsets.all(15.0),
+    children: <Widget>[
+    Center(
+    child:new Container(
           padding: EdgeInsets.all(8.0),
           child:new Card(
             child:
               new SettingsEditor(onToggled:_toggle,showMessage:_showMessage),
           )
-      );
+      ))]);
     }
 
   }

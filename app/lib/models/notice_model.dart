@@ -25,4 +25,14 @@ List<NoticeModel> testNoticeData = [
   ),
 ];
 
+List<NoticeModel> testNoticeData2 = [
+  new NoticeModel(
+    id:'n3',
+    senderName: 'teacher3',
+    title: 'title3',
+    message: 'message3',
+    time: new DateTime(2017,8,16,21),
+  ),
+];
+
 

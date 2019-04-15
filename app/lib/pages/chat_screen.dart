@@ -20,7 +20,7 @@ class ChatScreenState extends State<ChatScreen>{
 
   UserModel me;
   LoginToken _token;
-  List<UserModel> _peers;
+  //List<UserModel> _peers;
 
   void initState(){
     super.initState();
@@ -120,7 +120,7 @@ class ChatScreenState extends State<ChatScreen>{
     //  _peers=peerModel.peers;
     //});
 
-    print("peers len:"+_peers.length.toString());
+    //print("peers len:"+_peers.length.toString());
     //String meId=me.type?'s'+me.student.id:'t'+me.teacher.id;
     return StreamBuilder(
       stream: Firestore.instance.collection('peers').document(ChatUtil.getUserId(me)).snapshots(),

@@ -30,7 +30,7 @@ class _SFootprintHomeState extends State<SFootprintHome>
 
   void initState(){
     super.initState();
-    _tabController = new TabController(length: 3, vsync: this, initialIndex: 0);
+    _tabController = new TabController(length: 3, vsync: this, initialIndex: 1);
     students=UserUtil.getUserList(0);
     teachers=UserUtil.getUserList(1);
   }
@@ -43,22 +43,24 @@ class _SFootprintHomeState extends State<SFootprintHome>
     print("groupId:"+groupId);
     print("userId1"+userId1);
     print("userId2"+userId2);
-    Firestore.instance
-        .collection('messages')
-        .document(groupId)
-        .collection(groupId)
-        .document(DateTime
-        .now()
-        .millisecondsSinceEpoch
-        .toString()).setData({
-      'idFrom': userId1,
-      'idTo': userId2,
-      'timestamp': DateTime
-          .now()
-          .millisecondsSinceEpoch
-          .toString(),
-      'content': "Create Chat"
-    });
+
+    // version 1.0
+//    Firestore.instance
+//        .collection('messages')
+//        .document(groupId)
+//        .collection(groupId)
+//        .document(DateTime
+//        .now()
+//        .millisecondsSinceEpoch
+//        .toString()).setData({
+//      'idFrom': userId1,
+//      'idTo': userId2,
+//      'timestamp': DateTime
+//          .now()
+//          .millisecondsSinceEpoch
+//          .toString(),
+//      'content': "Create Chat"
+//    });
 
     Firestore.instance.collection('peers').
     document(userId1).get().then((res){
@@ -70,29 +72,26 @@ class _SFootprintHomeState extends State<SFootprintHome>
           if (o!=userId2) peers1.add(o);
         }
       }
-      print("self new peer size:"+peers1.length.toString());
       Firestore.instance.collection('peers')
           .document(userId1).setData({'peers':peers1});
-      //final peerModel =ScopedModel.of<PeerModel>(context);
       List<UserModel> result=ChatUtil.getModelsByIds(me, peers1);
-      print("result size:"+result.length.toString());
-      //peerModel.setPeers(result);
     });
 
-    Firestore.instance.collection('peers').
-    document(userId2).get().then((res){
-          List<String> peers2=new List<String>();
-          peers2.add(userId1);
-          if (res.exists) {
-            List<String> old= res.data['peers'].cast<String>();
-            for (String o in old){
-              if (o!=userId1) peers2.add(o);
-            }
-          }
-          print("peer new peer size:"+peers2.length.toString());
-          Firestore.instance.collection('peers')
-              .document(userId2).setData({'peers':peers2});
-    });
+    // version 1.0
+//    Firestore.instance.collection('peers').
+//    document(userId2).get().then((res){
+//          List<String> peers2=new List<String>();
+//          peers2.add(userId1);
+//          if (res.exists) {
+//            List<String> old= res.data['peers'].cast<String>();
+//            for (String o in old){
+//              if (o!=userId1) peers2.add(o);
+//            }
+//          }
+//          print("peer new peer size:"+peers2.length.toString());
+//          Firestore.instance.collection('peers')
+//              .document(userId2).setData({'peers':peers2});
+//    });
   }
 
   void _showUserList(){

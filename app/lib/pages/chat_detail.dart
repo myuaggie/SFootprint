@@ -37,6 +37,34 @@ class ChatDetailState extends State<ChatDetail>{
     if (content.trim() != '') {
       _textEditingController.clear();
 
+      Firestore.instance.collection('peers').
+      document(userId1).get().then((res){
+        List<String> peers1=new List<String>();
+        peers1.add(userId2);
+        if (res.exists) {
+          List<String> old= res.data['peers'].cast<String>();
+          for (String o in old){
+            if (o!=userId2) peers1.add(o);
+          }
+        }
+        Firestore.instance.collection('peers')
+            .document(userId1).setData({'peers':peers1});
+      });
+
+      Firestore.instance.collection('peers').
+      document(userId2).get().then((res){
+          List<String> peers2=new List<String>();
+          peers2.add(userId1);
+          if (res.exists) {
+            List<String> old= res.data['peers'].cast<String>();
+            for (String o in old){
+              if (o!=userId1) peers2.add(o);
+            }
+          }
+          Firestore.instance.collection('peers')
+              .document(userId2).setData({'peers':peers2});
+    });
+
       var documentReference = Firestore.instance
           .collection('messages')
           .document(groupId)
