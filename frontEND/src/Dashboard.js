@@ -216,13 +216,26 @@ class Dashboard extends React.Component {
                                 <ListItemText primary="校园新闻" />
                             </ListItem>
                         </Link>
-
-                        <ListItem button>
-                            <ListItemIcon>
-                                <AssignmentIcon/>
-                            </ListItemIcon>
-                            <ListItemText primary="申请" />
-                        </ListItem>
+						
+					<Link to="/apply">
+                    <ListItem button>
+                        <ListItemIcon>
+                            <AssignmentIcon/>
+                        </ListItemIcon>
+                        <ListItemText primary="申请" />
+                    </ListItem>
+                        </Link>
+						
+                        <Link to="/dealApply">
+                            <ListItem button>
+                                <ListItemIcon>
+                                    <AssignmentIcon/>
+                                </ListItemIcon>
+                                <ListItemText primary="处理申请" />
+                            </ListItem>
+                        </Link>
+						
+      
 
                         <Link to="/broadcast">
                             <ListItem button>

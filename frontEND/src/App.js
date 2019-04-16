@@ -6,7 +6,8 @@ import Dashboard from "./Dashboard";
 import FirstPage from "./FirstPage";
 import personalSetting from "./233/personalSetting";
 import broadcast from "./233/broadcast";
-
+import Apply from "./Apply";
+import DealApply from "./DealApply";
 
 class App extends Component {
     render() {
@@ -19,7 +20,8 @@ class App extends Component {
                         <Route path='/news' component={News}/>
                         <Route path='/personalSetting' component={personalSetting}/>
                         <Route path='/broadcast' component={broadcast}/>
-
+  						<Route path='/apply' component={Apply}/>
+                        <Route path='/dealApply' component={DealApply}/>
                     </Switch>
                 </Dashboard>
             </BrowserRouter>
