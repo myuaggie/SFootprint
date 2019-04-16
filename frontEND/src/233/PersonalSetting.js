@@ -73,7 +73,7 @@ const currencies = [
 ];
 
 
-class personalSetting extends React.Component {
+class PersonalSetting extends React.Component {
     state = {
         type:'student',
         id:'516123456789',
@@ -86,7 +86,7 @@ class personalSetting extends React.Component {
         email:'KarryWang@sjtu.edu.cn',
         password: 'au123456789',
         showPassword: false,
-        avatarUrl: "http://img1.imgtn.bdimg.com/it/u=1916478811,2608684192&fm=11&gp=0.jpg",
+        avatarUrl: "http://img5.imgtn.bdimg.com/it/u=2082125334,1947800039&fm=26&gp=0.jpg",
     };
 
     handleChange = prop => event => {
@@ -102,7 +102,6 @@ class personalSetting extends React.Component {
 
         return (
             <div align ="center">
-
                 <Avatar src={this.state.avatarUrl}className={classes.bigAvatar}/>
                 <br/>
                 <InputLabel htmlFor="input-with-icon-adornment">{this.state.type}</InputLabel>
@@ -112,6 +111,7 @@ class personalSetting extends React.Component {
                     <Input
                         id="input-with-icon-adornment"
                         value={this.state.username}
+                        onChange={this.handleChange('username')}
                         startAdornment={
                             <InputAdornment position="start">
                                 <i className="material-icons">
@@ -145,6 +145,7 @@ class personalSetting extends React.Component {
                     <Input
                         id="input-with-icon-adornment"
                         value={this.state.id}
+                        onChange={this.handleChange('id')}
                         startAdornment={
                             <InputAdornment position="start">
                                 <i className="material-icons">
@@ -160,6 +161,7 @@ class personalSetting extends React.Component {
                     <Input
                         id="input-with-icon-adornment"
                         value={this.state.realName}
+                        onChange={this.handleChange('realName')}
                         startAdornment={
                             <InputAdornment position="start">
                                 <AccountCircle />
@@ -173,6 +175,7 @@ class personalSetting extends React.Component {
                     <Input
                         id="input-with-icon-adornment"
                         value={this.state.grade}
+                        onChange={this.handleChange('grade')}
                         startAdornment={
                             <InputAdornment position="start">
                                 <i className="material-icons">
@@ -188,6 +191,7 @@ class personalSetting extends React.Component {
                     <Input
                         id="input-with-icon-adornment"
                         value={this.state.major}
+                        onChange={this.handleChange('major')}
                         startAdornment={
                             <InputAdornment position="start">
                                 <i className="material-icons">
@@ -197,7 +201,6 @@ class personalSetting extends React.Component {
                         }
                     />
                 </FormControl>
-
                 <br/>
                 <FormControl className={classes.margin}>
                     <TextField
@@ -235,13 +238,13 @@ class personalSetting extends React.Component {
                         ))}
                     </TextField>
                 </FormControl>
-
                 <br/>
                 <FormControl className={classes.margin}>
                     <InputLabel htmlFor="input-with-icon-adornment">Phone</InputLabel>
                     <Input
                         id="input-with-icon-adornment"
                         value={this.state.phone}
+                        onChange={this.handleChange('phone')}
                         startAdornment={
                             <InputAdornment position="start">
                                 <i className="material-icons">
@@ -257,17 +260,16 @@ class personalSetting extends React.Component {
                     提交修改
                 </Button>
 
-
             </div>
         );
     }
 }
 
-personalSetting.propTypes = {
+PersonalSetting.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(personalSetting);
+export default withStyles(styles)(PersonalSetting);
 
 /*
 * <InputAdornment position="start" onClick={this.handleClickShowPassword}>
@@ -278,4 +280,15 @@ export default withStyles(styles)(personalSetting);
                                     {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
                                 </IconButton>
                             </InputAdornment>
+* */
+/*
+*    {this.state.type}
+                {this.state.username}
+                {this.state.password}
+                {this.state.careerGoal}
+                {this.state.grade}
+                {this.state.phone}
+                {this.state.realName}
+                {this.state.major}
+                {this.state.id}
 * */

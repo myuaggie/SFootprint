@@ -234,15 +234,18 @@ class Dashboard extends React.Component {
                                 <ListItemText primary="处理申请" />
                             </ListItem>
                         </Link>
-						
-      
 
-                        <Link to="/broadcast">
+
+
+
+                        <Link to="/working">
                             <ListItem button>
                                 <ListItemIcon>
-                                    <PublicIcon/>
+                                    <i className="material-icons">
+                                        today
+                                    </i>
                                 </ListItemIcon>
-                                <ListItemText primary="发布通知" />
+                                <ListItemText primary="工作页面" />
                             </ListItem>
                         </Link>
 
