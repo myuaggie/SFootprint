@@ -7,19 +7,20 @@ import json
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
-@app.route('/TeachingInformationService')
-def TeachingInformationService():
-    html = urlopen('http://electsys.sjtu.edu.cn/edu/')
+
+@app.route('/EENews')
+def EENews():
+    html = urlopen('http://xsb.seiee.sjtu.edu.cn/')
     bsObj = BeautifulSoup(html, 'html.parser')
-    tag_a = bsObj.find_all('a', {'class': 'news'})
-    result = []
-    for x in tag_a:
+    tag_a = bsObj.find_all('a')
+    result=[]
+    for i in range(41, 45):
         info = dict()
-        info['href'] = x.get('href')
-        info['title'] = x.get('title')
-        info['site'] = '教学信息服务网'
+        info['href'] = 'http://xsb.seiee.sjtu.edu.cn/' + tag_a[i].get('href')
+        info['title'] = tag_a[i].string
+        info['site'] = '电院教务办本科生'
         result.append(info)
-    return jsonify(result[:9])
+    return jsonify(result)
 
 @app.route('/SJTUNews')
 def SJTUNews():
@@ -36,6 +37,16 @@ def SJTUNews():
         info['href'] = 'https://news.sjtu.edu.cn/'+tag_a[i].get('href')
         info['title'] = title[i]
         info['site'] = '上海交大新闻网'
+        result.append(info)
+
+    html2 = urlopen('http://electsys.sjtu.edu.cn/edu/')
+    bsObj2 = BeautifulSoup(html2, 'html.parser')
+    tag_a2 = bsObj2.find_all('a', {'class': 'news'})
+    for i in range(0, 9):
+        info = dict()
+        info['href'] = tag_a2[i].get('href')
+        info['title'] = tag_a2[i].get('title')
+        info['site'] = '教学信息服务网'
         result.append(info)
     return jsonify(result)
 
