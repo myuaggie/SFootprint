@@ -4,6 +4,7 @@ import 'package:sfootprint/shared/login_util.dart';
 import 'package:sfootprint/shared/user_util.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:sfootprint/models/login_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SettingsScreen extends StatefulWidget {
   
@@ -57,17 +58,17 @@ class SettingsScreenState extends State<SettingsScreen>{
     }
     else {
       return ListView(
-    shrinkWrap: true,
-    padding: EdgeInsets.all(15.0),
-    children: <Widget>[
-    Center(
-    child:new Container(
-          padding: EdgeInsets.all(8.0),
-          child:new Card(
-            child:
-              new SettingsEditor(onToggled:_toggle,showMessage:_showMessage),
-          )
-      ))]);
+        shrinkWrap: true,
+        padding: EdgeInsets.all(15.0),
+        children: <Widget>[
+        Center(
+        child:new Container(
+              padding: EdgeInsets.all(8.0),
+              child:new Card(
+                child:
+                  new SettingsEditor(onToggled:_toggle,showMessage:_showMessage),
+              )
+          ))]);
     }
 
   }
@@ -242,7 +243,7 @@ class _SettingsReadOnlyState extends State<SettingsReadOnly>{
     if (_token==null){
       return new Container();
     }
-    me=UserUtil.getUserBy(_token.id, _token.type);
+    me = loginModel.model;
     if (me.type==true){
       return _buildStudent(context);
     }
@@ -272,6 +273,8 @@ class _SettingsEditorState extends State<SettingsEditor>{
 
   UserModel me;
   LoginToken _token;
+
+  LoginModel loginModel;
   
   Widget _buildDropdownButton(){
     return Padding(
@@ -302,14 +305,30 @@ class _SettingsEditorState extends State<SettingsEditor>{
   void _toggleSave(){
     _formKey.currentState.save();
     if (me.type==true){
+      Firestore.instance.collection('student').document(_token.id).updateData({
+        'name':_name,
+        'careerGoal':_careerGoal
+      });
       me.student.name=_name;
       me.student.careerGoal=_careerGoal;
-      UserUtil.updateStudent(me.student);
+      loginModel.update(me);
+      // version 1.5
+//      me.student.name=_name;
+//      me.student.careerGoal=_careerGoal;
+//      UserUtil.updateStudent(me.student);
     }
     else {
+      Firestore.instance.collection('teacher').document(_token.id).updateData({
+        'name':_name,
+        'detail':_detail,
+      });
       me.teacher.name=_name;
       me.teacher.detail=_detail;
-      UserUtil.updateTeacher(me.teacher);
+      loginModel.update(me);
+      // version 1.5
+//      me.teacher.name=_name;
+//      me.teacher.detail=_detail;
+//      UserUtil.updateTeacher(me.teacher);
     }
     widget.onToggled();
     widget.showMessage('Success!');
@@ -477,12 +496,12 @@ class _SettingsEditorState extends State<SettingsEditor>{
   }
 
   Widget build(BuildContext context) {
-    final loginModel = ScopedModel.of<LoginModel>(context);
+    loginModel = ScopedModel.of<LoginModel>(context);
     _token = loginModel.token;
     if (_token==null){
       return new Container();
     }
-    me=UserUtil.getUserBy(_token.id, _token.type);
+    me=loginModel.model;
     if (me.type==true){
       if (_careerGoal==null) _careerGoal=me.student.careerGoal;
       return _buildStudent(context);
