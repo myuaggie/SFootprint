@@ -49,19 +49,19 @@ class ChatUtil{
     }
   }
 
-  static UserModel getModel(UserModel me, String id){
+  static UserModel getModel(UserModel me, String id, List<UserModel> teachers, List<UserModel> students){
     if (me.type){
-      for (TeacherModel t in testTeacherData){
-        if ('t'+t.id==id){
-          return UserModel(false, null,t);
+      for (UserModel t in teachers){
+        if ('t'+t.teacher.id==id){
+          return t;
 
         }
       }
     }
     else {
-      for (StudentModel s in testStudentData){
-        if ('s'+s.id==id){
-          return UserModel(true, s,null);
+      for (UserModel s in students){
+        if ('s'+s.student.id==id){
+          return s;
         }
       }
     }

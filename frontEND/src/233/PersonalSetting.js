@@ -16,6 +16,7 @@ import Grid from '@material-ui/core/Grid';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
+import db from './firebase.js';
 
 import {
       Form, FormGroup, ControlLabel, Glyphicon,
@@ -72,10 +73,9 @@ const currencies = [
     },
 ];
 
-
 class PersonalSetting extends React.Component {
     state = {
-        type:'student',
+        type:"student",
         id:'516123456789',
         realName:'王俊凯',
         name: "Karry",
@@ -86,7 +86,7 @@ class PersonalSetting extends React.Component {
         email:'KarryWang@sjtu.edu.cn',
         password: 'au123456789',
         showPassword: false,
-        avatarUrl: "http://img5.imgtn.bdimg.com/it/u=2082125334,1947800039&fm=26&gp=0.jpg",
+        avatarUrl: "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1028415273,4122561235&fm=27&gp=0.jpg",
     };
 
     handleChange = prop => event => {
@@ -97,6 +97,23 @@ class PersonalSetting extends React.Component {
         this.setState(state => ({ showPassword: !state.showPassword }));
     };
 
+    handleInfo= () => {
+        db.collection("student")
+            .doc(this.state.id.toString()).set(
+            {
+                type:this.state.type,
+                id:this.state.id,
+                realName:this.state.realName,
+                name: this.state.name,
+                grade: this.state.grade,
+                major:this.state.major,
+                careerGoal:this.state.careerGoal,
+                phone:this.state.phone,
+                email:this.state.email,
+                password: this.state.password,
+                avatarUrl: this.state.avatarUrl,
+            })
+    };
     render() {
         const { classes } = this.props;
 
@@ -107,11 +124,11 @@ class PersonalSetting extends React.Component {
                 <InputLabel htmlFor="input-with-icon-adornment">{this.state.type}</InputLabel>
                 <br/>
                 <FormControl className={classes.margin}>
-                    <InputLabel htmlFor="input-with-icon-adornment">Username</InputLabel>
+                    <InputLabel htmlFor="input-with-icon-adornment">Name</InputLabel>
                     <Input
                         id="input-with-icon-adornment"
-                        value={this.state.username}
-                        onChange={this.handleChange('username')}
+                        value={this.state.name}
+                        onChange={this.handleChange('name')}
                         startAdornment={
                             <InputAdornment position="start">
                                 <i className="material-icons">
@@ -144,6 +161,7 @@ class PersonalSetting extends React.Component {
                     <InputLabel htmlFor="input-with-icon-adornment">Id</InputLabel>
                     <Input
                         id="input-with-icon-adornment"
+                        disabled
                         value={this.state.id}
                         onChange={this.handleChange('id')}
                         startAdornment={
@@ -159,6 +177,7 @@ class PersonalSetting extends React.Component {
                 <FormControl className={classes.margin}>
                     <InputLabel htmlFor="input-with-icon-adornment">RealName</InputLabel>
                     <Input
+                        disabled
                         id="input-with-icon-adornment"
                         value={this.state.realName}
                         onChange={this.handleChange('realName')}
@@ -175,6 +194,7 @@ class PersonalSetting extends React.Component {
                     <Input
                         id="input-with-icon-adornment"
                         value={this.state.grade}
+                        disabled
                         onChange={this.handleChange('grade')}
                         startAdornment={
                             <InputAdornment position="start">
@@ -191,6 +211,7 @@ class PersonalSetting extends React.Component {
                     <Input
                         id="input-with-icon-adornment"
                         value={this.state.major}
+                        disabled
                         onChange={this.handleChange('major')}
                         startAdornment={
                             <InputAdornment position="start">
@@ -255,6 +276,22 @@ class PersonalSetting extends React.Component {
                     />
                 </FormControl>
                 <br/>
+                <FormControl className={classes.margin}>
+                    <InputLabel htmlFor="input-with-icon-adornment">Email</InputLabel>
+                    <Input
+                        id="input-with-icon-adornment"
+                        value={this.state.email}
+                        onChange={this.handleChange('email')}
+                        startAdornment={
+                            <InputAdornment position="start">
+                                <i className="material-icons">
+                                    email
+                                </i>
+                            </InputAdornment>
+                        }
+                    />
+                </FormControl>
+                <br/>
                 <Button color = "primary" variant="contained"
                         onClick = {this.handleInfo}>
                     提交修改
@@ -291,4 +328,34 @@ export default withStyles(styles)(PersonalSetting);
                 {this.state.realName}
                 {this.state.major}
                 {this.state.id}
+    id:1,
+    realName:Maggie,
+    name: Myu,
+    grade: Bachelor Grade Three,
+    major:SE,
+    careerGoal:IT,
+    phone:18621880739,
+    email:920369216@qq.com,
+    password: this.state.password,
+    avatarUrl: https://gss0.baidu.com/-vo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/b90e7bec54e736d10a64ec699c504fc2d562695f.jpg,
 * */
+/*
+*     handleInfo= () => {
+        db.collection(this.state.type)
+            .doc(this.state.id.toString()).update(
+            {
+                type:this.state.type,
+                id:this.state.id,
+                realName:this.state.realName,
+                name: this.state.name,
+                grade: this.state.grade,
+                major:this.state.major,
+                careerGoal:this.state.careerGoal,
+                phone:this.state.phone,
+                email:this.state.email,
+                password: this.state.password,
+                avatarUrl: this.state.avatarUrl,
+            })
+    };
+* */
+

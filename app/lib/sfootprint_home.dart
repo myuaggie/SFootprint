@@ -22,8 +22,8 @@ class SFootprintHome extends StatefulWidget {
 class _SFootprintHomeState extends State<SFootprintHome>
     with SingleTickerProviderStateMixin{
   TabController _tabController;
-  List<UserModel> students;
-  List<UserModel> teachers;
+  List<UserModel> students=new List<UserModel>();
+  List<UserModel> teachers=new List<UserModel>();
 
   UserModel me;
   LoginToken _token;
@@ -31,8 +31,30 @@ class _SFootprintHomeState extends State<SFootprintHome>
   void initState(){
     super.initState();
     _tabController = new TabController(length: 3, vsync: this, initialIndex: 1);
-    students=UserUtil.getUserList(0);
-    teachers=UserUtil.getUserList(1);
+    Firestore.instance.collection('student').getDocuments().then((snapshot){
+      List<UserModel> _students=new List<UserModel>();
+      for (DocumentSnapshot res in snapshot.documents){
+        _students.add(UserModel(true, StudentModel(res.data['id'].toString(), res.data['realName'],
+            res.data['name'], res.data['grade'], res.data['major'], res.data['careerGoal'],
+            res.data['phone'], res.data['email'], res.data['avatarUrl']), null));
+      }
+      setState(() {
+        students=_students;
+      });
+    });
+    Firestore.instance.collection('teacher').getDocuments().then((snapshot){
+      List<UserModel> _teachers=new List<UserModel>();
+      for (DocumentSnapshot res in snapshot.documents){
+        _teachers.add(UserModel(false, null, TeacherModel(res.data['id'].toString(), res.data['realName'],
+            res.data['name'], res.data['position'], res.data['major'], res.data['detail'],
+            res.data['phone'], res.data['email'], res.data['avatarUrl'])));
+      }
+      setState(() {
+        teachers=_teachers;
+      });
+    });
+//    students=UserUtil.getUserList(0);
+//    teachers=UserUtil.getUserList(1);
   }
 
   void _createGroup(UserModel user1, UserModel user2,BuildContext context){
@@ -43,24 +65,6 @@ class _SFootprintHomeState extends State<SFootprintHome>
     print("groupId:"+groupId);
     print("userId1"+userId1);
     print("userId2"+userId2);
-
-    // version 1.0
-//    Firestore.instance
-//        .collection('messages')
-//        .document(groupId)
-//        .collection(groupId)
-//        .document(DateTime
-//        .now()
-//        .millisecondsSinceEpoch
-//        .toString()).setData({
-//      'idFrom': userId1,
-//      'idTo': userId2,
-//      'timestamp': DateTime
-//          .now()
-//          .millisecondsSinceEpoch
-//          .toString(),
-//      'content': "Create Chat"
-//    });
 
     Firestore.instance.collection('peers').
     document(userId1).get().then((res){
@@ -76,41 +80,26 @@ class _SFootprintHomeState extends State<SFootprintHome>
           .document(userId1).setData({'peers':peers1});
       List<UserModel> result=ChatUtil.getModelsByIds(me, peers1);
     });
-
-    // version 1.0
-//    Firestore.instance.collection('peers').
-//    document(userId2).get().then((res){
-//          List<String> peers2=new List<String>();
-//          peers2.add(userId1);
-//          if (res.exists) {
-//            List<String> old= res.data['peers'].cast<String>();
-//            for (String o in old){
-//              if (o!=userId1) peers2.add(o);
-//            }
-//          }
-//          print("peer new peer size:"+peers2.length.toString());
-//          Firestore.instance.collection('peers')
-//              .document(userId2).setData({'peers':peers2});
-//    });
   }
 
   void _showUserList(){
     final loginModel = ScopedModel.of<LoginModel>(context);
     _token = loginModel.token;
-    me=UserUtil.getUserBy(_token.id, _token.type);
+    me=loginModel.model;
     showDialog(
         context: context,
         builder: (BuildContext context){
           return SimpleDialog(
             title: new Text("Create New Chat",style: new TextStyle(fontSize: 20.0,color:Colors.blue),),
-                    children: <Widget>[
+            children: <Widget>[
                   Container(
-                    height:200,
+                    height:300,
                     width: 400,
-                    child:new ListView.builder(
-                  itemCount: me.type?teachers.length:students.length,
-                    shrinkWrap: true,
-                  itemBuilder: (context, i) => new Column(
+                    child:
+                    new ListView.builder(
+                      itemCount: me.type?teachers.length:students.length,
+                      shrinkWrap: true,
+                      itemBuilder: (context, i) => new Column(
                     children: <Widget>[
                       new Divider(
                         height: 10.0,
@@ -160,16 +149,11 @@ class _SFootprintHomeState extends State<SFootprintHome>
                         ),
                         trailing: InkWell(
                           onTap: () {
-                            //final peerModel = ScopedModel.of<PeerModel>(context);
                             if (me.type){
                               _createGroup(me, teachers[i],context);
-                              //peerModel.addPeer(teachers[i]);
-                            //  Navigator.of(context).popAndPushNamed('/home');
                             }
                             else {
                               _createGroup(me, students[i],context);
-                              //peerModel.addPeer(students[i]);
-                             // Navigator.of(context).popAndPushNamed('/home');
                             }
                           },
                           child: Icon(Icons.add, color: Colors.blue),
@@ -185,17 +169,6 @@ class _SFootprintHomeState extends State<SFootprintHome>
   }
 
   void _initPeers(UserModel me, BuildContext context){
-//    List<String> peers=List<String>();
-//    if (me.type){
-//      peers.add('t1');
-//    }
-//    else {
-//      peers.add('s1');
-//    }
-//    List<UserModel> result=ChatUtil.getModelsByIds(me, peers);
-//    final peerModel =ScopedModel.of<PeerModel>(context);
-//    peerModel.setPeers(result);
-    final peerModel =ScopedModel.of<PeerModel>(context);
     String meId=me.type?'s'+me.student.id:'t'+me.teacher.id;
     Firestore.instance.collection('peers').
     document(meId).get().then((res){
@@ -203,12 +176,10 @@ class _SFootprintHomeState extends State<SFootprintHome>
         print("has peers");
         List<String> peers=res.data['peers'].cast<String>();
         List<UserModel> result=ChatUtil.getModelsByIds(me, peers);
-        peerModel.setPeers(result);
       }
       else {
         print("no peers");
         List<UserModel> result=new List<UserModel>();
-        peerModel.setPeers(result);
       }
     });
   }
@@ -220,7 +191,7 @@ class _SFootprintHomeState extends State<SFootprintHome>
       if (_token==null){
         return LoginScreen();
       }
-      me = UserUtil.getUserBy(_token.id, _token.type);
+      me = loginModel.model;
       _initPeers(me, context);
     }
     return new Scaffold(
@@ -251,7 +222,7 @@ class _SFootprintHomeState extends State<SFootprintHome>
         controller: _tabController,
         children: <Widget>[
           NoticeScreen(),
-          ChatScreen(),
+          ChatScreen(teacherList:teachers,studentList:students),
           SettingsScreen(),
         ],
       ),

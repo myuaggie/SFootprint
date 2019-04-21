@@ -1,5 +1,6 @@
 import 'package:sfootprint/models/settings_model.dart';
 
+
 class UserUtil{
 
   static StudentModel getStudentBy(String id){
