@@ -15,6 +15,7 @@ import Typography from '@material-ui/core/Typography';
 import Broadcast from './Broadcast';
 import UploadFile from './UploadFile'
 import Avatar from "@material-ui/core/Avatar";
+import TeacherSetting from './TeacherSetting'
 
 function TabContainer(props) {
     return (
@@ -65,6 +66,9 @@ class Working extends React.Component {
                         <Tab label="上传成绩" icon={<i className="material-icons">
                             publish
                         </i>}/>
+                        <Tab label="资料编辑" icon={<i className="material-icons">
+                            publish
+                        </i>}/>
                     </Tabs>
                 </AppBar>
                 {value === 0 && <TabContainer>
@@ -72,6 +76,9 @@ class Working extends React.Component {
                 </TabContainer>}
                 {value === 1 && <TabContainer>
                     <UploadFile/>
+                </TabContainer>}
+                {value === 2 && <TabContainer>
+                    <TeacherSetting/>
                 </TabContainer>}
 
             </div>
