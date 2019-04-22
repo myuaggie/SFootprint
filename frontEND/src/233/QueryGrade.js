@@ -170,7 +170,7 @@ class QueryGrade extends React.Component {
         avatarUrl: "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1028415273,4122561235&fm=27&gp=0.jpg",
         courseid:"SE203",
         year:"2019-1",
-        result:"",
+        result:[],
 
     };
 
@@ -207,28 +207,15 @@ class QueryGrade extends React.Component {
         if(dataset[0]!=null) {
             // alert(dataset[0].平时分);
             this.setState(state => ({
-                result:JSON.stringify(res),
+                result:dataset,
                 平时分:dataset[0].平时分,
                 期末分:dataset[0].期末分,
                 总分:dataset[0].总分,
             }));
         }
 
-        // db.collection("student")
-        //     .doc(this.state.id.toString()).set(
-        //     {
-        //         type:this.state.type,
-        //         id:this.state.id,
-        //         realName:this.state.realName,
-        //         name: this.state.name,
-        //         grade: this.state.grade,
-        //         major:this.state.major,
-        //         careerGoal:this.state.careerGoal,
-        //         phone:this.state.phone,
-        //         email:this.state.email,
-        //         password: this.state.password,
-        //         avatarUrl: this.state.avatarUrl,
-        //     })
+
+
     };
     componentWillMount=()=>{
         grades=[];
@@ -242,19 +229,16 @@ class QueryGrade extends React.Component {
                     var str = JSON.stringify(doc.data());
                     var obj = eval('(' + str + ')');
                     grades.push(obj);
+
                 });
+                this.setState(state => ({
+                    result:grades,
+                }));
             })
             .catch(function(error) {
                 console.log("Error getting document:", error);
             });
-        // alert(JSON.stringify(res));
 
-        if(grades[0]!=null) {
-            // alert(dataset[0].平时分);
-            this.setState(state => ({
-                result:JSON.stringify(res),
-            }));
-        }
     }
     handleInfo2= prop => {
         var obj ;
@@ -277,25 +261,10 @@ class QueryGrade extends React.Component {
         if(grades[0]!=null) {
             // alert(dataset[0].平时分);
             this.setState(state => ({
-                result:JSON.stringify(res),
+                result:grades,
             }));
         }
 
-        // db.collection("student")
-        //     .doc(this.state.id.toString()).set(
-        //     {
-        //         type:this.state.type,
-        //         id:this.state.id,
-        //         realName:this.state.realName,
-        //         name: this.state.name,
-        //         grade: this.state.grade,
-        //         major:this.state.major,
-        //         careerGoal:this.state.careerGoal,
-        //         phone:this.state.phone,
-        //         email:this.state.email,
-        //         password: this.state.password,
-        //         avatarUrl: this.state.avatarUrl,
-        //     })
     };
 
 
@@ -317,7 +286,7 @@ class QueryGrade extends React.Component {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {grades.map(row => (
+                            {this.state.result.map(row => (
                                 <TableRow key={row.id}>
                                     <TableCell component="th" scope="row">
                                         {row.courseid}

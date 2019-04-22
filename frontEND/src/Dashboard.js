@@ -13,6 +13,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import {secondaryListItems } from './ListItems';
 import { createMuiTheme} from '@material-ui/core/styles';
@@ -26,6 +27,22 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 import PetsIcon from '@material-ui/icons/Pets';
 import {Link} from "react-router-dom";
 import Footer from "./Footer";
+import Button from "@material-ui/core/es/Button/Button";
+import DialogTitle from "@material-ui/core/es/DialogTitle/DialogTitle";
+import Tabs from "@material-ui/core/es/Tabs/Tabs";
+import Tab from "@material-ui/core/es/Tab/Tab";
+import DialogContent from "@material-ui/core/es/DialogContent/DialogContent";
+import Fade from "@material-ui/core/es/Fade/Fade";
+import TextField from "@material-ui/core/es/TextField/TextField";
+import Dialog from "@material-ui/core/es/Dialog/Dialog";
+import TabContainer from "react-bootstrap/es/TabContainer";
+import Paper from "@material-ui/core/es/Paper/Paper";
+import DialogActions from "@material-ui/core/es/DialogActions/DialogActions";
+import Grid from "@material-ui/core/es/Grid/Grid";
+import InputLabel from "@material-ui/core/es/InputLabel/InputLabel";
+import InputAdornment from "@material-ui/core/es/InputAdornment/InputAdornment";
+import Input from "@material-ui/core/es/Input/Input";
+import FormControl from "@material-ui/core/es/FormControl/FormControl";
 const theme = createMuiTheme({
     palette: {
         primary: blueGrey,
@@ -126,9 +143,43 @@ class Dashboard extends React.Component {
     {
         super(props);
         this.state = {
-            open:true
+            open:true,
+            student:false,
+            teacher1:false,
+            teacher2:false,
+            loginPop:false,
+            registerPop:false,
+            logoutPop:false,
+            value:0,  //logintabs
+            loginPattern:0
         };
     }
+
+    handleLogout= () => {
+        this.setState({
+            student:false,
+            teacher1:false,
+            teacher2:false,
+            logoutPop:false
+        });
+
+    };
+
+    handleChangeTabs = (event, value) => {
+        this.setState({ value });
+    };
+
+    handleLogoutOpen = () => {
+        this.setState({logoutPop:true});
+    };
+
+    handleLoginOpen = () =>{
+        this.setState({ loginPop:true});
+    };
+
+    handleRegisterOpen = () =>{
+        this.setState({ registerPop:true});
+    };
 
     handleDrawerOpen = () => {
         this.setState({ open: true });
@@ -136,6 +187,55 @@ class Dashboard extends React.Component {
 
     handleDrawerClose = () => {
         this.setState({ open: false });
+    };
+    handleLoginClose = () =>{
+        this.setState({ loginPop:false});
+    };
+    handleLogoutClose= () =>{
+        this.setState({ logoutPop:false});
+    };
+
+    handleLogin = () => {
+        let username = document.getElementById("username-input");
+        let password = document.getElementById("password-input");
+        // if(this.state.value === 1){
+        //     this.setState({
+        //         student:true,
+        //         teacher1:false,
+        //         teacher2:false,
+        //         //loginPattern:1,
+        //         loginPop:false
+        //     });
+        // }
+        if(this.state.value === 0){
+            this.setState({
+                student:true,
+                teacher1:false,
+                teacher2:false,
+                loginPop:false
+            });
+        }
+        else if(this.state.value === 1){
+            this.setState({
+                teacher1:true,
+                student:false,
+                teacher2:false,
+                loginPop:false
+            });
+        }
+        else if(this.state.value === 2){
+            this.setState({
+                teacher2:true,
+                student:false,
+                teacher1:false,
+                loginPop:false
+            });
+        }
+        this.setState({
+            loginPop:false
+        });
+        alert("login success!");
+
     };
 
     render() {
@@ -170,11 +270,27 @@ class Dashboard extends React.Component {
                         >
                             校园足迹 in SJTU
                         </Typography>
-                        <IconButton color="inherit">
-                            <Badge badgeContent={4} color="secondary">
-                                <NotificationsIcon />
-                            </Badge>
-                        </IconButton>
+
+                        {!(this.state.student || this.state.teacher1 || this.state.teacher2)
+                            ? <Button
+                                color="inherit"
+                                onClick={this.handleLoginOpen}>
+                                Login
+                            </Button>
+                            : <Button
+                                color="inherit"
+                                onClick={this.handleLogoutOpen}>
+                                Logout
+                            </Button>
+                        }
+                        {!(this.state.student || this.state.teacher1 || this.state.teacher2) &&
+                        <Button color="inherit"
+                                onClick={this.handleRegisterOpen}>
+                            Register
+                        </Button>
+                        }
+
+
                     </Toolbar>
                 </AppBar>
                 <Drawer
@@ -189,8 +305,10 @@ class Dashboard extends React.Component {
                             <ChevronLeftIcon />
                         </IconButton>
                     </div>
-                    <Divider />
+                    <Divider/>
+
                     <List>
+                        {this.state.student &&
                         <Link to="/personalSetting">
                             <ListItem button>
                                 <ListItemIcon>
@@ -198,63 +316,186 @@ class Dashboard extends React.Component {
                                         account_box
                                     </i>
                                 </ListItemIcon>
-                                <ListItemText primary="学生入口" />
+                                <ListItemText primary="个人中心" />
                             </ListItem>
                         </Link>
+                        }
+                        <Link to="/footprint">
                         <ListItem button>
                             <ListItemIcon>
                                 <PetsIcon/>
                             </ListItemIcon>
                             <ListItemText primary="我的足迹" />
                         </ListItem>
-
-                        <Link to="/news">
+                        </Link>
+                        {this.state.student &&
+                            <Link to="/apply">
                             <ListItem button>
-                                <ListItemIcon>
-                                    <PublicIcon/>
-                                </ListItemIcon>
-                                <ListItemText primary="校园新闻" />
-                            </ListItem>
-                        </Link>
-						
-					<Link to="/apply">
-                    <ListItem button>
-                        <ListItemIcon>
+                            <ListItemIcon>
                             <AssignmentIcon/>
-                        </ListItemIcon>
-                        <ListItemText primary="申请" />
-                    </ListItem>
-                        </Link>
-						
+                            </ListItemIcon>
+                            <ListItemText primary="申请" />
+                            </ListItem>
+                            </Link>
+                        }
+                        {this.state.teacher2 &&
                         <Link to="/dealApply">
                             <ListItem button>
                                 <ListItemIcon>
                                     <AssignmentIcon/>
                                 </ListItemIcon>
-                                <ListItemText primary="处理申请" />
+                                <ListItemText primary="处理申请"/>
                             </ListItem>
                         </Link>
-
-                        <Link to="/working">
+                        }
+                        {(this.state.teacher1) &&
+                        <Link to="/working1">
                             <ListItem button>
                                 <ListItemIcon>
                                     <i className="material-icons">
                                         today
                                     </i>
                                 </ListItemIcon>
-                                <ListItemText primary="老师入口" />
+                                <ListItemText primary="工作中心"/>
                             </ListItem>
                         </Link>
-
+                        }
+                        {(this.state.teacher2) &&
+                        <Link to="/working2">
+                            <ListItem button>
+                                <ListItemIcon>
+                                    <i className="material-icons">
+                                        today
+                                    </i>
+                                </ListItemIcon>
+                                <ListItemText primary="工作中心"/>
+                            </ListItem>
+                        </Link>
+                        }
                     </List>
                     <Divider />
-                    <List>{secondaryListItems}</List>
+                    <Link to="/news">
+                        <ListItem button>
+                            <ListItemIcon>
+                                <PublicIcon/>
+                            </ListItemIcon>
+                            <ListItemText primary="校园新闻" />
+                        </ListItem>
+                    </Link>
                 </Drawer>
                 <main className={classes.content}>
                     <div className={classes.appBarSpacer} />
                     {this.props.children}
                     <Footer/>
                 </main>
+
+                    <Dialog
+                        open={this.state.loginPop}
+                        onClose={this.handleLoginClose}
+                        aria-labelledby="form-dialog-title"
+                    >
+                        <DialogTitle id="form-dialog-title">Login</DialogTitle>
+                        <DialogContent>
+                            {this.state.loginPattern===0 &&
+                            <div className={classes.loginTab}>
+                                <AppBar position="static">
+                                    <Tabs value={this.state.value} onChange={this.handleChangeTabs}>
+                                        <Tab label="学生"/>
+                                        <Tab label="教务处老师"/>
+                                        <Tab label="学服老师"/>
+                                    </Tabs>
+                                </AppBar>
+                                {this.state.value === 0 &&
+                                <TabContainer>
+                                    <Fade in={this.state.value === 0}>
+                                        <div className={classes.margin}>
+                                            <Grid container spacing={8} alignItems="flex-end">
+                                                <Grid item>
+                                                    <AccountCircleIcon />
+                                                </Grid>
+                                                <Grid item>
+                                                    <TextField id="username-input" label="用户名" />
+                                                </Grid>
+
+                                                <Grid item>
+                                                    <TextField id="password-input" label="密码" />
+                                                </Grid>
+                                            </Grid>
+
+                                        </div>
+                                    </Fade>
+                                </TabContainer>}
+                                {this.state.value === 1 &&
+                                <TabContainer>
+                                    <Fade in={this.state.value === 1}>
+                                        <div className={classes.margin}>
+                                            <Grid container spacing={8} alignItems="flex-end">
+                                                <Grid item>
+                                                    <AccountCircleIcon />
+                                                </Grid>
+                                                <Grid item>
+                                                    <TextField id="username-input" label="用户名" />
+                                                </Grid>
+
+                                                <Grid item>
+                                                    <TextField id="password-input" label="密码" />
+                                                </Grid>
+                                            </Grid>
+
+                                        </div>
+                                    </Fade>
+                                </TabContainer>}
+                                {this.state.value === 2 &&
+                                <TabContainer>
+                                    <Fade in={this.state.value === 2}>
+                                        <div className={classes.margin}>
+                                            <Grid container spacing={8} alignItems="flex-end">
+                                                <Grid item>
+                                                    <AccountCircleIcon />
+                                                </Grid>
+                                                <Grid item>
+                                                    <TextField id="username-input" label="用户名" />
+                                                </Grid>
+
+                                                <Grid item>
+                                                    <TextField id="password-input" label="密码" />
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                    </Fade>
+                                </TabContainer>}
+                            </div>}
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={this.handleLoginClose} color="secondary">
+                                Cancel
+                            </Button>
+                            <Button onClick={this.handleLogin} color="primary">
+                                Login
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+
+                    <Dialog
+                        open={this.state.logoutPop}
+                        onClose={this.handleLogoutClose}
+                        aria-labelledby="form-dialog-title"
+                    >
+                        <DialogTitle className={classes.registerTitle} id="form-dialog-title">Logout</DialogTitle>
+                        <DialogContent>
+                            <Typography component="p">
+                                Are you sure to log out?
+                            </Typography>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={this.handleLogoutClose} color="secondary">
+                                Cancel
+                            </Button>
+                            <Button onClick={this.handleLogout} color="primary">
+                                Logout
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
                 </MuiThemeProvider>
             </div>
         );

@@ -39,7 +39,7 @@ const styles = theme => ({
         overflowX: 'auto',
     },
     table: {
-        maxWidth: 500,
+        maxWidth: 700,
     },
     margin: {
         margin: theme.spacing.unit,
@@ -154,6 +154,7 @@ const currencies = [
 var res;
 var dataset=[];
 var grades=[];
+var kk=true;
 class CourseGrade extends React.Component {
     state = {
         type:"student",
@@ -204,9 +205,12 @@ class CourseGrade extends React.Component {
         // }
     }
     handleInfo2= prop => {
-        grades=[];
+        if(kk)grades=[];
+        kk=!kk;
         var obj ;
-        var query = db.collection("grade").where("courseid","==",this.state.courseid).where("year","==",this.state.year);
+        var query = db.collection("grade")
+            .where("courseid","==",this.state.courseid)
+            .where("year","==",this.state.year);
         query.get()
             .then(function(querySnapshot) {
                 querySnapshot.forEach(function(doc) {
@@ -215,14 +219,14 @@ class CourseGrade extends React.Component {
                     var str = JSON.stringify(doc.data());
                     var obj = eval('(' + str + ')');
                     grades.push(obj);
+                    // console.log(grades);
                 });
             })
             .catch(function(error) {
                 console.log("Error getting document:", error);
             });
         if(grades[0]!=null) {
-            alert(dataset[0].平时分);
-
+            // alert(grades[0].平时分);
         }
         this.setState(state => ({
             show:!this.state.show
@@ -231,7 +235,6 @@ class CourseGrade extends React.Component {
 
     render() {
         const { classes } = this.props;
-
         return (
             <div align ="center">
                 <Paper className={classes.table}>
@@ -271,6 +274,7 @@ class CourseGrade extends React.Component {
                         <TableHead>
                             <TableRow>
                                 <TableCell>StudentId</TableCell>
+                                <TableCell align="left">课程名字</TableCell>
                                 <TableCell align="right">平时分</TableCell>
                                 <TableCell align="right">期末分</TableCell>
                                 <TableCell align="right">总分</TableCell>
@@ -282,6 +286,7 @@ class CourseGrade extends React.Component {
                                     <TableCell component="th" scope="row">
                                         {row.studentid}
                                     </TableCell>
+                                    <TableCell align="left">{row.coursename}</TableCell>
                                     <TableCell align="right">{row.平时分}</TableCell>
                                     <TableCell align="right">{row.期末分}</TableCell>
                                     <TableCell align="right">{row.总分}</TableCell>

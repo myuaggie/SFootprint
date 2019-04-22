@@ -42,7 +42,7 @@ const styles = theme => ({
     },
 });
 
-class Working extends React.Component {
+class Working1 extends React.Component {
     state = {
         value: 0,
     };
@@ -108,8 +108,8 @@ class Working extends React.Component {
     }
 }
 
-Working.propTypes = {
+Working1.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Working);
+export default withStyles(styles)(Working1);

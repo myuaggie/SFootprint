@@ -42,7 +42,7 @@ const styles = theme => ({
     },
 });
 
-class Working extends React.Component {
+class Working2 extends React.Component {
     state = {
         value: 0,
     };
@@ -68,18 +68,11 @@ class Working extends React.Component {
                         <Tab label="发布通知" icon={<i className="material-icons">
                             radio
                         </i>} />
-                        <Tab label="上传成绩" icon={<i className="material-icons">
-                            publish
-                        </i>}/>
-                        <Tab label="拉取成绩" icon={<i className="material-icons">
-                            cloud_download
-                        </i>}/>
+
                         <Tab label="个人资料" icon={<i className="material-icons">
                             account_box
                         </i>}/>
-                        <Tab label="成绩查询" icon={<i className="material-icons">
-                            library_books
-                        </i>}/>
+
                         <Tab label="我发布的通知" icon={<i className="material-icons">
                             message
                         </i>}/>
@@ -88,19 +81,12 @@ class Working extends React.Component {
                 {value === 0 && <TabContainer>
                     <Broadcast/>
                 </TabContainer>}
+
                 {value === 1 && <TabContainer>
-                    <UploadFile/>
-                </TabContainer>}
-                {value === 2 && <TabContainer>
-                    <DealGrade/>
-                </TabContainer>}
-                {value === 3 && <TabContainer>
                     <TeacherSetting/>
                 </TabContainer>}
-                {value === 4 && <TabContainer>
-                    <CourseGrade/>
-                </TabContainer>}
-                {value === 5 && <TabContainer>
+
+                {value === 2 && <TabContainer>
                     <MyNotice/>
                 </TabContainer>}
             </div>
@@ -108,8 +94,8 @@ class Working extends React.Component {
     }
 }
 
-Working.propTypes = {
+Working2.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Working);
+export default withStyles(styles)(Working2);
