@@ -157,7 +157,7 @@ const theme = createMuiTheme({
 class Broadcast extends Component {
     state = {
         id:"",
-        senderid:"1",
+        senderid:"4",
         senderName:"王源",
         title:"",
         message:"",

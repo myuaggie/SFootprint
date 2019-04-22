@@ -191,12 +191,12 @@ var notices=[];
 class MyNotice extends Component {
     state = {
         id:"",
-        senderid:"1",
-        senderName:"王源",
+        senderid:"4",
+        senderName:"李荣浩",
         title:"",
         message:"",
         condition:"",
-        receiver: "IT",
+        receiver: "",
         expanded: false
     }
     handleChange = prop => event => {
@@ -214,7 +214,7 @@ class MyNotice extends Component {
         // var db = firebase.firestore();
 
          var sendNotice = db.collection("broadcast");
-         var query = sendNotice.where("senderid","==","1");
+         var query = sendNotice.where("senderid","==",this.state.senderid);
         query.get()
             .then(function(querySnapshot) {
                 querySnapshot.forEach(function(doc) {
@@ -231,7 +231,7 @@ class MyNotice extends Component {
         // alert(JSON.stringify(res));
         if(notices[0]!=null){
             this.setState({
-                condition:"发布成功",
+                condition:"获取成功",
                 title:"",
                 message:"",
             });
@@ -293,37 +293,3 @@ MyNotice.propTypes = {
 };
 
 export default withStyles(styles) (MyNotice);
-/*
-* <TextField
-                        select
-                        className={classNames(classes.margin, classes.textField)}
-                        value={this.state.careerGoal}
-                        onChange={this.handleChange('careerGoal')}
-                        InputProps={{
-                            startAdornment:
-                                <InputAdornment position="start">
-                                    <i className="material-icons">
-                                        email
-                                    </i>
-                                </InputAdornment>,
-                        }}
-                        SelectProps={{
-                            native: true,
-                            MenuProps: {
-                                className: classes.menu,
-                            },
-                        }}
-                        startAdornment={
-                            <InputAdornment position="start">
-                                <i className="material-icons">
-                                    perm_identity
-                                </i>
-                            </InputAdornment>
-                        }
-                    >
-                        {currencies.map(option => (
-                            <option key={option.value} value={option.value}>
-                                {option.label}
-                            </option>
-                        ))}
-                    </TextField>*/
