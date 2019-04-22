@@ -25,11 +25,11 @@ import purple from "@material-ui/core/colors/purple";
 import InputBase from "@material-ui/core/InputBase";
 import Card from "./MyNotice";
 import Paper from "@material-ui/core/Paper";
-import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
+import Table from "@material-ui/core/Table";
 
 const styles = theme => ({
     root: {
@@ -170,7 +170,7 @@ class CourseRecommend extends React.Component {
         avatarUrl: "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1028415273,4122561235&fm=27&gp=0.jpg",
         courseid:"SE203",
         year:"2019-1",
-        result:"",
+        result:[],
     };
 
     handleChange = prop => event => {
@@ -182,79 +182,52 @@ class CourseRecommend extends React.Component {
     };
 
     handleInfo= prop => {
-        var obj ;
-        var docRef = db.collection("grade").doc(this.state.courseid).collection(this.state.year).doc(this.state.id)
-            .get()
-            .then(function(doc) {
-                if (doc.exists) {
-                    dataset=[];
-                    console.log("Document data:", doc.data());
-                    res = doc.data();
-                    var str = JSON.stringify(doc.data());
-                    obj = eval('(' + str + ')');
-                    // alert(obj.平时分);
-                    var r = {平时分:obj.平时分,期末分:obj.期末分,总分:obj.总分};
-                    dataset.push(r);
-                } else {
-                    // doc.data() will be undefined in this case
-                    console.log("No such document!");
-                }
-            })
-            .catch(function(error) {
-                console.log("Error getting document:", error);
+        var courses = [];
+        courses.push("SE203");
+        courses.push("SE204");
+        let formdata3 = new FormData();
+        formdata3.append("courses",courses);
+        fetch('http://localhost:5000/recommend',{
+            method:'POST',
+            mode:'cors',
+            body:formdata3,
+        })
+            .then(response=>{
+                return response.json()
+                    .then(result=>{
+                        console.log(result);
+                        this.setState({
+                          result:result
+                        });
+                    });
             });
-        if(dataset[0]!=null) {
-            // alert(dataset[0].平时分);
-            this.setState(state => ({
-                result:JSON.stringify(res),
-                平时分:dataset[0].平时分,
-                期末分:dataset[0].期末分,
-                总分:dataset[0].总分,
-            }));
-        }
-
-        // db.collection("student")
-        //     .doc(this.state.id.toString()).set(
-        //     {
-        //         type:this.state.type,
-        //         id:this.state.id,
-        //         realName:this.state.realName,
-        //         name: this.state.name,
-        //         grade: this.state.grade,
-        //         major:this.state.major,
-        //         careerGoal:this.state.careerGoal,
-        //         phone:this.state.phone,
-        //         email:this.state.email,
-        //         password: this.state.password,
-        //         avatarUrl: this.state.avatarUrl,
-        //     })
     };
-    componentWillMount=()=>{
-        grades=[];
-        var obj ;
-        var query = db.collection("grade").where("studentid","==","1");
-        query.get()
-            .then(function(querySnapshot) {
-                querySnapshot.forEach(function(doc) {
-                    // doc.data() is never undefined for query doc snapshots
-                    console.log(doc.id, " => ", doc.data());
-                    var str = JSON.stringify(doc.data());
-                    var obj = eval('(' + str + ')');
-                    grades.push(obj);
-                });
-            })
-            .catch(function(error) {
-                console.log("Error getting document:", error);
-            });
-        // alert(JSON.stringify(res));
-
-        if(grades[0]!=null) {
-            // alert(dataset[0].平时分);
-            this.setState(state => ({
-                result:JSON.stringify(res),
-            }));
-        }
-    }
+    // componentWillMount=()=>{
+    //     grades=[];
+    //     var obj ;
+    //     var query = db.collection("grade").where("studentid","==","1");
+    //     query.get()
+    //         .then(function(querySnapshot) {
+    //             querySnapshot.forEach(function(doc) {
+    //                 // doc.data() is never undefined for query doc snapshots
+    //                 console.log(doc.id, " => ", doc.data());
+    //                 var str = JSON.stringify(doc.data());
+    //                 var obj = eval('(' + str + ')');
+    //                 grades.push(obj);
+    //             });
+    //         })
+    //         .catch(function(error) {
+    //             console.log("Error getting document:", error);
+    //         });
+    //     // alert(JSON.stringify(res));
+    //
+    //     if(grades[0]!=null) {
+    //         // alert(dataset[0].平时分);
+    //         this.setState(state => ({
+    //             result:JSON.stringify(res),
+    //         }));
+    //     }
+    // }
     handleInfo2= prop => {
         var obj ;
         var query = db.collection("grade").where("studentid","==","1");
@@ -307,33 +280,32 @@ class CourseRecommend extends React.Component {
                     <Table className={classes.table}>
                         <TableHead>
                             <TableRow>
-                                <TableCell>courseid</TableCell>
-                                <TableCell align="left">课程名称</TableCell>
-                                <TableCell align="left">学期</TableCell>
-                                <TableCell align="left">平时分</TableCell>
-                                <TableCell align="left">期末分</TableCell>
-                                <TableCell align="left">总分</TableCell>
+                                <TableCell> 推荐方案 </TableCell>
+                                <TableCell align="left">课程组合</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {grades.map(row => (
-                                <TableRow key={row.id}>
+                            {this.state.result.map((item,i)=>(
+                                <TableRow key={i}>
                                     <TableCell component="th" scope="row">
-                                        {row.courseid}
+                                        {i+1}
                                     </TableCell>
-                                    <TableCell align="left">{row.coursename}</TableCell>
-                                    <TableCell align="left">{row.year}</TableCell>
-                                    <TableCell align="left">{row.平时分}</TableCell>
-                                    <TableCell align="left">{row.期末分}</TableCell>
-                                    <TableCell align="left">{row.总分}</TableCell>
+                                    <TableCell component="th" scope="row">
+                                        {item.map((row)=>(
+                                            row+" 、 "
+                                        ))
+                                        }
+                                    </TableCell>
                                 </TableRow>
-                            ))}
+                            ))
+                            }
                         </TableBody>
                     </Table>
+
                 </Paper>
                 <Button color = "primary" variant="contained"
-                        onClick = {this.handleInfo2}>
-                    我的成绩
+                        onClick = {this.handleInfo}>
+                    推荐课程
                 </Button>
             </div>
         );

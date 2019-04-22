@@ -1,4 +1,4 @@
-import { Upload, Icon, message } from 'antd';
+import {Upload, Icon, message, Divider, Button} from 'antd';
 import React from 'react';
 import InputLabel from "@material-ui/core/InputLabel";
 import PropTypes from "prop-types";
@@ -25,9 +25,11 @@ class UploadFile extends React.Component {
         super(props);
         this.state={
             loading:false,
-            course:"SE203",
+            courseid:"SE203",
             imageUrl:'',
             year:'2019-1',
+            filename:[],
+            id:"",
          };
         this.beforeUpload=this.beforeUpload.bind(this);
     }
@@ -35,20 +37,61 @@ class UploadFile extends React.Component {
     handleChange = prop => event => {
         this.setState({ [prop]: event.target.value });
     };
-    beforeUpload=(file)=> {
-        let formData = new FormData();
-        formData.append("file", file);
+    beforeUpload=(file)=>{
+        let newfilename = this.state.filename;
+        newfilename.push(file.name);
+        this.setState({ filename: newfilename});
+        let data= {
+            courseid:"SE203",
+            year:"2019-1",
+            filename: file.name,
+        };
+
+        /*生成 id*/
         $.ajax({
-            url: "http://47.103.7.215:8080/Entity/U1b3f54782445b8/bus/Bus/1",
+            url: "http://47.103.7.215:8080/Entity/U3380821163e707/SJTULife/File",
             type: "POST",
-            data: formData,
+            data: JSON.stringify(data),
+            dateType:'json',
+            headers:{'Content-Type':'application/json'},
             contentType: false,
             processData: false,
             success: function (data) {
                 console.log(data);
             }
         });
+
+        /*获取 id*/
+        $.ajax({
+            url: "http://47.103.7.215:8080/Entity/U3380821163e707/SJTULife/File?File.filename="+file.name,
+            type: "GET",
+            dateType:'json',
+            headers:{'Content-Type':'application/json'},
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                let dataObj = data["File"];
+                this.setState({ id: dataObj[0].id});
+            }.bind(this)
+        });
+
+
+        let formData = new FormData();
+        formData.append('filename', file);
+        $.ajax({
+            url: "http://47.103.7.215:8080/Entity/U3380821163e707/SJTULife/File/"+this.state.id,
+            type: "POST",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                alert("成功提交!");
+            }
+        });
     };
+
+
+
 
     render() {
         const { classes } = this.props;
@@ -108,10 +151,13 @@ class UploadFile extends React.Component {
                                                height="100px" width="100px" /> : uploadButton}
 
                 </Upload>
-
-                <a href="1.txt" download="1.txt">
-                    下载成绩</a>
-
+                <Divider orientation="left">提交成绩表</Divider>
+                <Upload beforeUpload={this.beforeUpload}>
+                    <Button>
+                        <Icon type="upload" /> Click to Upload
+                    </Button>
+                </Upload>
+                <br/>
             </div>
 
         );

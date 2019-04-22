@@ -162,7 +162,7 @@ class Broadcast extends Component {
         title:"",
         message:"",
         condition:"",
-        receiver: "IT",
+        receiver: "",
     }
     handleChange = prop => event => {
         this.setState({ [prop]: event.target.value });

@@ -8,6 +8,7 @@ import PersonalSetting from "./233/PersonalSetting";
 import Working from "./233/Working"
 import Apply from "./Apply";
 import DealApply from "./DealApply";
+import Studying from "./233/Studying";
 
 
 class App extends Component {
@@ -19,7 +20,7 @@ class App extends Component {
                     <Switch>
                         <Route exact path='/' component={FirstPage}/>
                         <Route path='/news' component={News}/>
-                        <Route path='/personalSetting' component={PersonalSetting}/>
+                        <Route path='/personalSetting' component={Studying}/>
                         <Route path='/working' component={Working}/>
   						<Route path='/apply' component={Apply}/>
                         <Route path='/dealApply' component={DealApply}/>
