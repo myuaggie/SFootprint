@@ -127,7 +127,7 @@ class TeacherSetting extends React.Component {
                     <InputLabel htmlFor="input-with-icon-adornment">Name</InputLabel>
                     <Input
                         id="input-with-icon-adornment"
-                        value={this.state.username}
+                        value={this.state.name}
                         onChange={this.handleChange('Name')}
                         startAdornment={
                             <InputAdornment position="start">
@@ -232,7 +232,7 @@ class TeacherSetting extends React.Component {
                         startAdornment={
                             <InputAdornment position="start">
                                 <i className="material-icons">
-                                    call
+                                    more
                                 </i>
                             </InputAdornment>
                         }

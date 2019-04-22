@@ -198,7 +198,7 @@ class Dashboard extends React.Component {
                                         account_box
                                     </i>
                                 </ListItemIcon>
-                                <ListItemText primary="个人信息" />
+                                <ListItemText primary="学生入口" />
                             </ListItem>
                         </Link>
                         <ListItem button>
@@ -235,9 +235,6 @@ class Dashboard extends React.Component {
                             </ListItem>
                         </Link>
 
-
-
-
                         <Link to="/working">
                             <ListItem button>
                                 <ListItemIcon>
@@ -245,10 +242,9 @@ class Dashboard extends React.Component {
                                         today
                                     </i>
                                 </ListItemIcon>
-                                <ListItemText primary="工作页面" />
+                                <ListItemText primary="老师入口" />
                             </ListItem>
                         </Link>
-
 
                     </List>
                     <Divider />

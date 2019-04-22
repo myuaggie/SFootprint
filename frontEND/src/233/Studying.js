@@ -18,7 +18,8 @@ import Avatar from "@material-ui/core/Avatar";
 import TeacherSetting from './TeacherSetting'
 import QueryGrade from './QueryGrade'
 import MyNotice from "./MyNotice";
-import CourseGrade from "./CourseGrade";
+import StudentSetting from "./StudentSetting";
+import CourseRecommend from "./CourseRecommend";
 
 function TabContainer(props) {
     return (
@@ -40,7 +41,7 @@ const styles = theme => ({
     },
 });
 
-class Working extends React.Component {
+class Studying extends React.Component {
     state = {
         value: 0,
     };
@@ -63,45 +64,33 @@ class Working extends React.Component {
                         textColor="primary"
                         centered
                     >
-                        <Tab label="发布通知" icon={<i className="material-icons">
-                            radio
-                        </i>} />
-                        <Tab label="上传成绩" icon={<i className="material-icons">
-                            publish
-                        </i>}/>
                         <Tab label="个人资料" icon={<i className="material-icons">
                             account_box
                         </i>}/>
                         <Tab label="成绩查询" icon={<i className="material-icons">
                             library_books
                         </i>}/>
-                        <Tab label="我发布的通知" icon={<i className="material-icons">
-                            message
+                        <Tab label="课程推荐" icon={<i className="material-icons">
+                            library_books
                         </i>}/>
                     </Tabs>
                 </AppBar>
                 {value === 0 && <TabContainer>
-                    <Broadcast/>
+                    <StudentSetting/>
                 </TabContainer>}
                 {value === 1 && <TabContainer>
-                    <UploadFile/>
+                    <QueryGrade/>
                 </TabContainer>}
                 {value === 2 && <TabContainer>
-                    <TeacherSetting/>
-                </TabContainer>}
-                {value === 3 && <TabContainer>
-                    <CourseGrade/>
-                </TabContainer>}
-                {value === 4 && <TabContainer>
-                    <MyNotice/>
+                    <CourseRecommend/>
                 </TabContainer>}
             </div>
         );
     }
 }
 
-Working.propTypes = {
+Studying.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Working);
+export default withStyles(styles)(Studying);

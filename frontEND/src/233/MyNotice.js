@@ -24,9 +24,43 @@ import TextArea from "antd/es/input/TextArea";
 import InputAdornment from "@material-ui/core/InputAdornment";
 // import firebase from 'firebase';
 import db from './firebase.js';
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+import Typography from "@material-ui/core/Typography";
+import CardActions from "@material-ui/core/CardActions";
+import red from "@material-ui/core/es/colors/red";
+import Collapse from "@material-ui/core/Collapse";
+import IconButton from "@material-ui/core/IconButton";
+import CardMedia from "@material-ui/core/CardMedia";
+import CardHeader from "@material-ui/core/CardHeader";
+import Avatar from "@material-ui/core/Avatar";
 
 
 const styles = theme => ({
+    card: {
+        maxWidth: 700,
+        margin:20,
+    },
+    media: {
+        height: 0,
+        paddingTop: '56.25%', // 16:9
+    },
+    actions: {
+        display: 'flex',
+    },
+    expand: {
+        transform: 'rotate(0deg)',
+        marginLeft: 'auto',
+        transition: theme.transitions.create('transform', {
+            duration: theme.transitions.duration.shortest,
+        }),
+    },
+    expandOpen: {
+        transform: 'rotate(180deg)',
+    },
+    avatar: {
+        backgroundColor: red[500],
+    },
     root: {
         display: 'flex',
         flexWrap: 'wrap',
@@ -153,8 +187,8 @@ const theme = createMuiTheme({
 //     apiKey: 'AIzaSyBl9i4zCUV0-dmrm2EOg9Jxm7of4iTRjko',
 //     projectId: 'sfootprint2'
 // });
-
-class Broadcast extends Component {
+var notices=[];
+class MyNotice extends Component {
     state = {
         id:"",
         senderid:"1",
@@ -163,47 +197,45 @@ class Broadcast extends Component {
         message:"",
         condition:"",
         receiver: "IT",
+        expanded: false
     }
     handleChange = prop => event => {
         this.setState({ [prop]: event.target.value });
     };
 
+    handleExpandClick = () => {
+        this.setState(state => ({ expanded: !state.expanded }));
+    };
+    componentWillMount=()=>{
+        notices=[];
+        this.handleBroadcast();
+    }
     handleBroadcast= () => {
-        var myDate = new Date();
-        myDate.toLocaleDateString();     //获取当前日期
-        var time = myDate.toLocaleString();
-        alert("发布成功");
-
         // var db = firebase.firestore();
-        db.collection("notice/"+this.state.receiver+"/"+this.state.receiver)
-            .doc(myDate.getTime().toString()).set(
-            {
-                message:this.state.message,
-                senderid:this.state.senderid,
-                reveiver:this.state.receiver,
-                senderName:this.state.senderName,
-                title:this.state.title,
-                time:time
+
+         var sendNotice = db.collection("broadcast");
+         var query = sendNotice.where("senderid","==","1");
+        query.get()
+            .then(function(querySnapshot) {
+                querySnapshot.forEach(function(doc) {
+                    // doc.data() is never undefined for query doc snapshots
+                    console.log(doc.id, " => ", doc.data());
+                    var str = JSON.stringify(doc.data());
+                    var obj = eval('(' + str + ')');
+                    notices.push(obj);
+                });
             })
-
-        db.collection("broadcast")
-            .doc(myDate.getTime().toString()).set(
-            {
-                message:this.state.message,
-                senderid:this.state.senderid,
-                receiver:this.state.receiver,
-                senderName:this.state.senderName,
-                title:this.state.title,
-                time:time
-            })
-
-
-        this.setState({
-            condition:"发布成功",
-            title:"",
-            message:"",
-        });
-
+            .catch(function(error) {
+                console.log("Error getting document:", error);
+            });
+        // alert(JSON.stringify(res));
+        if(notices[0]!=null){
+            this.setState({
+                condition:"发布成功",
+                title:"",
+                message:"",
+            });
+        }
     };
 
     render() {
@@ -212,58 +244,35 @@ class Broadcast extends Component {
             <div align="center">
                 <h1>
                     <InputLabel shrink htmlFor="bootstrap-input" className={classes.bootstrapFormLabel}>
-                        通知
+                        我发布的通知
                     </InputLabel>
                 </h1>
                 <br/>
-                <FormControl className={classes.margin}>
-                    <InputLabel shrink htmlFor="bootstrap-input" className={classes.bootstrapFormLabel}>
-                        接收者
-                    </InputLabel>
-                    <Input
-                        id="input-with-icon-adornment"
-                        value={this.state.receiver}
-                        onChange={this.handleChange('receiver')}
-                        classes={{
-                            root: classes.bootstrapRoot,
-                            input: classes.bootstrapInput,
-                        }}
-                    />
-                </FormControl>
-                <br/>
-                <FormControl className={classes.margin}>
-                    <InputLabel shrink htmlFor="bootstrap-input" className={classes.bootstrapFormLabel}>
-                        标题
-                    </InputLabel>
-                    <InputBase
-                        id="title"
-                        value={this.state.title}
-                        onChange={this.handleChange('title')}
-                        classes={{
-                            root: classes.bootstrapRoot,
-                            input: classes.bootstrapInput,
-                        }}
+                {notices.map((item, i) => (
+                        <Card className={classes.card}>
+                            {/*<CardHeader*/}
+                                {/*title={"Title: "+item.title}*/}
+                                {/*subheader={"receiver: "+item.receiver + "  " + item.time}*/}
+                            {/*/>*/}
+                            <CardContent>
+                                <Typography gutterBottom variant="h5" component="h1">
+                                    {item.title}
+                                </Typography>
+                                <Typography component="p">
+                                    {"  发布时间: " + item.time + "  接收者: "+item.receiver  }
+                                </Typography>
+                                <Typography component="p">
 
-                    />
-                </FormControl>
-                <br/>
-
-                <FormControl className={classes.margin}>
-                    <InputLabel shrink htmlFor="bootstrap-input" className={classes.bootstrapFormLabel}>
-                        内容
-                    </InputLabel>
-                    <InputBase
-                        multiline
-                        id="bootstrap-input"
-                        value={this.state.message}
-                        onChange={this.handleChange('message')}
-                        rows = {3}
-                        classes={{
-                            root: classes.bootstrapRoot,
-                            input: classes.bootstrapInput2,
-                        }}
-                    />
-                </FormControl>
+                                </Typography>
+                                {/*<Typography component="p" gutterBottom variant="h5" component="h5">*/}
+                                    {/*{"content: "}*/}
+                                {/*</Typography>*/}
+                                <Typography component="p" gutterBottom variant="h5" component="h5">
+                                    {item.message}
+                                </Typography>
+                            </CardContent>
+                        </Card>
+                ))}
                 <br/>
                 <InputLabel shrink htmlFor="bootstrap-input" className={classes.bootstrapFormLabel}>
                     {this.state.condition}
@@ -271,7 +280,7 @@ class Broadcast extends Component {
                 <br/>
                 <Button color = "primary" variant="contained"
                                          onClick = {this.handleBroadcast}>
-                    发布
+                    获取
                 </Button>
                 <br/>
             </div>
@@ -279,11 +288,11 @@ class Broadcast extends Component {
     }
 }
 
-Broadcast.propTypes = {
+MyNotice.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles) (Broadcast);
+export default withStyles(styles) (MyNotice);
 /*
 * <TextField
                         select

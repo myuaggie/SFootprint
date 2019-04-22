@@ -27,6 +27,7 @@ class UploadFile extends React.Component {
             loading:false,
             course:"SE203",
             imageUrl:'',
+            year:'2019-1',
          };
         this.beforeUpload=this.beforeUpload.bind(this);
     }
@@ -74,6 +75,24 @@ class UploadFile extends React.Component {
                             </InputAdornment>
                         }
                     />
+                </FormControl>
+                <br/>
+                <br/>
+                <FormControl className={classes.margin}>
+                    <InputLabel htmlFor="input-with-icon-adornment">学年</InputLabel>
+                    <Input
+                        id="input-with-icon-adornment"
+                        value={this.state.year}
+                        onChange={this.handleChange('year')}
+                        startAdornment={
+                            <InputAdornment position="start">
+                                <i className="material-icons">
+                                    radio_button_checked
+                                </i>
+                            </InputAdornment>
+                        }
+                    />
+
                 </FormControl>
                 <br/>
                 <br/>
