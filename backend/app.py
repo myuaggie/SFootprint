@@ -1,12 +1,26 @@
 from flask import Flask
 from urllib.request import urlopen #用于获取网页
 from bs4 import BeautifulSoup #用于解析网页
-from flask_cors import CORS
+from flask_cors import *
 from flask import jsonify
 import json
+import AprioriAll
+from flask import request
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
+aa=AprioriAll.AprioriAll(train_data='test_courses2.csv', min_support_rate=0.6)
+
+
+@app.before_first_request
+def init():
+   # aa = AprioriAll.AprioriAll(train_data='test_courses2.csv', min_support_rate=0.6)
+    aa.sortPhase()
+    aa.litemsetPhase()
+    aa.transformationPhase()
+    aa.sequencePhase()
+    print('init done')
+
 
 @app.route('/EENews')
 def EENews():
@@ -21,6 +35,7 @@ def EENews():
         info['site'] = '电院教务办本科生'
         result.append(info)
     return jsonify(result)
+
 
 @app.route('/SJTUNews')
 def SJTUNews():
@@ -50,11 +65,19 @@ def SJTUNews():
         result.append(info)
     return jsonify(result)
 
+
+@app.route("/recommend",methods=['POST'])
+def recommend():
+    courses = request.form['courses']
+    return jsonify(aa.recommend(courses))
+
+
 @app.after_request
 def add_header(response):
     response.headers['Access-Control-Allow-Origin'] = '*'
     response.headers['Access-Control-Allow-Headers'] = 'Content-Type,Authorization'
     return response
+
 
 if __name__ == '__main__':
     app.run()
