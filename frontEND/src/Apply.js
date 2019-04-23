@@ -3,9 +3,6 @@ import React from 'react';
 
 import PropTypes from 'prop-types';
 
-import Typography from "@material-ui/core/es/Typography/Typography";
-import ListItemIcon from "@material-ui/core/es/ListItemIcon/ListItemIcon";
-import VisibilityIcon from '@material-ui/icons/Visibility';
 import {createMuiTheme, withStyles} from "@material-ui/core/styles/index";
 import blueGrey from "@material-ui/core/colors/blueGrey";
 import {MuiThemeProvider} from "@material-ui/core/es/styles/index";
@@ -15,13 +12,30 @@ import Grid from "@material-ui/core/es/Grid/Grid";
 import TextField from "@material-ui/core/es/TextField/TextField";
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import { Table, Divider, Tag } from 'antd';
+import AutorenewIcon from '@material-ui/icons/Autorenew';
+import DescriptionIcon from '@material-ui/icons/Description';
+import { Table, Divider} from 'antd';
 import {
     Upload, message, Button, Icon,
 } from 'antd';
 import 'antd/dist/antd.css';
 import $ from 'jquery';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import AppBar from '@material-ui/core/AppBar';
+import Typography from "@material-ui/core/es/Typography/Typography";
+
+function TabContainer(props) {
+    return (
+        <Typography component="div" style={{ padding: 8 * 3 }}>
+            {props.children}
+        </Typography>
+    );
+}
+
+TabContainer.propTypes = {
+    children: PropTypes.node.isRequired,
+};
 
 const columns = [{
     title: '申请表',
@@ -59,12 +73,18 @@ class Apply extends React.Component {
             textContent:'',
             id:"",
             filename:[],
-            applyStatus:[]
+            applyStatus:[],
+            value:0
         };
         this.handleTitleChange = this.handleTitleChange.bind(this);
         this.handleContentChange = this.handleContentChange.bind(this);
         this.beforeUpload = this.beforeUpload.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
+
+    handleClick = () =>{
+        alert("Success!");
+    };
 
     handleTitleChange(value){
         this.setState({ textTitle: value});
@@ -72,9 +92,10 @@ class Apply extends React.Component {
     handleContentChange(value){
         this.setState({ textContent: value});
     }
-
+    handleChange = (event, value) => {
+        this.setState({ value });
+    };
     componentWillMount() {
-
         $.ajax({
             url: "http://47.103.7.215:8080/Entity/U3380821163e707/SJTULife/Apply?Apply.username=Winny",
             type: "GET",
@@ -104,6 +125,7 @@ class Apply extends React.Component {
     }
 
     beforeUpload=(file)=>{
+        alert("成功提交!");
         let newfilename = this.state.filename;
         newfilename.push(file.name);
         this.setState({ filename: newfilename});
@@ -152,39 +174,64 @@ class Apply extends React.Component {
             contentType: false,
             processData: false,
             success: function (data) {
-                alert("成功提交!");
             }
         });
+
+        let itemList = this.state.applyStatus;
+        let temp={"filename":file.name,
+            "reply":"已提交"};
+        itemList.push(temp);
+        this.setState({ applyStatus: itemList});
     };
 
     render() {
         const { classes } = this.props;
         return (
-            <div>
-                    <Divider orientation="left">奖学金申请</Divider>
-                    <a href="http://xsb.seiee.sjtu.edu.cn/content/fileUpload.action?method=downFileById&amp;fileId=10EE264FA2DE4F46955C9D1AC7FAFC42" download="2019wish奖学金申请表.xls">
-                        2019wish奖学金申请表</a>
-                    <br/>
-                    <a href="http://xsb.seiee.sjtu.edu.cn/content/fileUpload.action?method=downFileById&amp;fileId=50761A3DBAB44F7FB1135707FEA5FA02" download="2019心动奖学金申请表.xls">
-                        2019心动奖学金申请表</a>
-                    <Divider orientation="left">贫困生补助申请</Divider>
-                    <a href="http://affairs.sjtu.edu.cn/file_save/ueditor/jsp/upload/20181102/96671541154208261.docx" target="_self" textvalue="上海交通大学补充助学金申请表（新评、续评通用）">上海交通大学补充助学金申请表（新评、续评通用）</a>
-                    <br/>
-                    <a href="http://affairs.sjtu.edu.cn/file_save/ueditor/jsp/upload/20181102/9061541154164192.docx" target="_self" textvalue="上海交通大学补充助学金取消续评表（通用）">上海交通大学补充助学金取消续评表（通用）</a>
+            <div className={classes.root}>
+                <AppBar position="static" color="default">
+                    <Tabs
+                        value={this.state.value}
+                        onChange={this.handleChange}
+                        variant="scrollable"
+                        scrollButtons="on"
+                        indicatorColor="primary"
+                        textColor="primary"
+                        centered
+                    >
+                        <Tab label="申请表下载及提交" icon={<DescriptionIcon />} />
+                        <Tab label="提交状态" icon={<AutorenewIcon />} />
+                        <Tab label="其他申请" icon={<DescriptionIcon />} />
+                    </Tabs>
+                </AppBar>
+                {this.state.value === 0 &&
+                <TabContainer>
+                    <div>
+                        <Divider orientation="left">奖学金申请</Divider>
+                        <a href="http://xsb.seiee.sjtu.edu.cn/content/fileUpload.action?method=downFileById&amp;fileId=10EE264FA2DE4F46955C9D1AC7FAFC42" download="2019wish奖学金申请表.xls">
+                            2019wish奖学金申请表</a>
+                        <br/>
+                        <a href="http://xsb.seiee.sjtu.edu.cn/content/fileUpload.action?method=downFileById&amp;fileId=50761A3DBAB44F7FB1135707FEA5FA02" download="2019心动奖学金申请表.xls">
+                            2019心动奖学金申请表</a>
+                        <Divider orientation="left">贫困生补助申请</Divider>
+                        <a href="http://affairs.sjtu.edu.cn/file_save/ueditor/jsp/upload/20181102/96671541154208261.docx" target="_self" textvalue="上海交通大学补充助学金申请表（新评、续评通用）">上海交通大学补充助学金申请表（新评、续评通用）</a>
+                        <br/>
+                        <a href="http://affairs.sjtu.edu.cn/file_save/ueditor/jsp/upload/20181102/9061541154164192.docx" target="_self" textvalue="上海交通大学补充助学金取消续评表（通用）">上海交通大学补充助学金取消续评表（通用）</a>
 
-                <Divider orientation="left">提交申请表</Divider>
-                    <Upload beforeUpload={this.beforeUpload}>
-                        <Button>
-                            <Icon type="upload" /> Click to Upload
-                        </Button>
-                    </Upload>
-                <br/>
-                    <Divider orientation="left">申请表提交状态</Divider>
+                        <Divider orientation="left">提交申请表</Divider>
+                        <Upload beforeUpload={this.beforeUpload}>
+                            <Button>
+                                <Icon type="upload" /> Click to Upload
+                            </Button>
+                        </Upload>
+                    </div>
+                </TabContainer>}
+                {this.state.value === 1 &&
+                <TabContainer>
                     <Table columns={columns} dataSource={this.state.applyStatus} />
-
-
                     <Divider orientation="left">其他申请</Divider>
-
+                </TabContainer>}
+                {this.state.value === 2 &&
+                <TabContainer>
                     <Grid container spacing={8} alignItems="flex-end">
                         <Grid item>
                             <AccountCircleIcon/>
@@ -209,8 +256,8 @@ class Apply extends React.Component {
                                 modules={this.tools}
                                 placeholder="申请内容" onChange={this.handleContentChange}/>
                     <br/>
-                <Button block>点击提交</Button>
-
+                    <Button block onClick={this.handleClick}>点击提交</Button>
+                </TabContainer>}
             </div>
         );
     }

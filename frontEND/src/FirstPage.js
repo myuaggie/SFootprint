@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import './App.css';
-import News from "./News";
-import {HashRouter, Route} from 'react-router-dom';
-import Dashboard from "./Dashboard";
 
+let tsIcon = require('./images/pic.jpg');
 class FirstPage extends Component {
     render() {
         return (
-            <h1>主页</h1>
+            <div>
+
+                <img src={tsIcon} alt="" />
+
+            </div>
         );
     }
 }

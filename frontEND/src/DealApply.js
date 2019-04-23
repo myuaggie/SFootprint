@@ -7,7 +7,6 @@ import {MuiThemeProvider} from "@material-ui/core/es/styles/index";
 import 'react-quill/dist/quill.snow.css';
 import $ from "jquery";
 import { Table, Popconfirm } from "antd";
-
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -60,7 +59,7 @@ class DealApply extends React.Component {
                 title: "申请表",
                 dataIndex: "title",
                 width: "30%",
-                render: (text, record) => <a href={record.url}>{text}</a>,
+                render: (text, record) => <a href={record.url}  target="_blank">{text}</a>,
             },
         ];
 
@@ -74,7 +73,7 @@ class DealApply extends React.Component {
                 title: "申请表",
                 dataIndex: "title",
                 width: "30%",
-                render: (text, record) => <a href={record.url}>{text}</a>,
+                render: (text, record) => <a href={record.url}  target="_blank">{text}</a>,
             },
             {
                 title: "operation",
@@ -149,7 +148,9 @@ class DealApply extends React.Component {
                             "username": dataObj[i].username
                         };
                         itemListUnapproved.push(add);
+                        console.log("itemListUnapproved:"+dataObj[i].id);
                     }
+
                     else{
                         let add = {
                             "url": 'http://47.103.7.215:8080/file/U3380821163e707/SJTULife/Apply/' + dataObj[i].id,
@@ -160,6 +161,7 @@ class DealApply extends React.Component {
                         itemListApproved.push(add);
                     }
                 }
+
                 this.setState({
                     unapprovedApply: itemListUnapproved ,
                     approvedApply:itemListApproved
